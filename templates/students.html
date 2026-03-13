@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Students - CV Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Registered Students</h1>
+  <a href="/register" class="btn btn-primary">+ Register New Student</a>
+</div>
+<div class="card">
+  {% if students %}
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Roll No.</th><th>Department</th><th>Registered On</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td><strong>{{ s.name }}</strong></td>
+        <td>{{ s.roll_number }}</td>
+        <td><span class="badge badge-info">{{ s.department }}</span></td>
+        <td style="font-size:.85rem;color:#888;">{{ s.registered_on }}</td>
+        <td>
+          <form method="post" action="/delete_student/{{ s.id }}"
+                onsubmit="return confirm('Delete {{ s.name }}?')">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p style="text-align:center;padding:40px;color:#888;">
+      No students registered yet. <a href="/register">Register the first student</a>
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

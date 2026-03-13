@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Attendance Records - CV Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Attendance Records</h1>
+  <a href="/export_csv?date={{ selected_date }}" class="btn btn-warning">Export CSV</a>
+</div>
+<div class="card" style="margin-bottom:16px;">
+  <form method="get" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <label style="font-weight:600;">Select Date:</label>
+    <input type="date" class="form-control" name="date" value="{{ selected_date }}" style="max-width:200px;">
+    <button class="btn btn-primary">View</button>
+    {% if all_dates %}
+    <select class="form-control" name="date" onchange="this.form.submit()" style="max-width:220px;">
+      <option value="">Quick select date</option>
+      {% for d in all_dates %}
+        <option value="{{ d }}" {% if d == selected_date %}selected{% endif %}>{{ d }}</option>
+      {% endfor %}
+    </select>
+    {% endif %}
+  </form>
+</div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-value">{{ summary.total }}</div><div class="stat-label">Total Students</div></div>
+  <div class="stat-card green"><div class="stat-value">{{ summary.present }}</div><div class="stat-label">Present</div></div>
+  <div class="stat-card red"><div class="stat-value">{{ summary.absent }}</div><div class="stat-label">Absent</div></div>
+  <div class="stat-card orange"><div class="stat-value">{{ summary.percentage }}%</div><div class="stat-label">Rate</div></div>
+</div>
+<div class="card">
+  <div class="card-title">Attendance for {{ selected_date }}</div>
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>#</th><th>Name</th><th>Roll No.</th><th>Department</th><th>Date</th><th>Time</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><strong>{{ r.name }}</strong></td>
+        <td>{{ r.roll_number }}</td>
+        <td><span class="badge badge-info">{{ r.department }}</span></td>
+        <td>{{ r.date }}</td>
+        <td>{{ r.time }}</td>
+        <td><span class="badge badge-success">{{ r.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p style="text-align:center;padding:40px;color:#888;">No attendance records found for {{ selected_date }}.</p>
+  {% endif %}
+</div>
+{% endblock %}

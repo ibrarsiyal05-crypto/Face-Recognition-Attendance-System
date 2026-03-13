@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - CV Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <div style="display:flex;gap:10px;">
+    <form method="post" action="/train">
+      <button class="btn btn-warning">Train Model</button>
+    </form>
+    <form method="post" action="/start_recognition">
+      <button class="btn btn-success">Start Recognition</button>
+    </form>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-value">{{ summary.total }}</div>
+    <div class="stat-label">Total Students</div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-value">{{ summary.present }}</div>
+    <div class="stat-label">Present Today</div>
+  </div>
+  <div class="stat-card red">
+    <div class="stat-value">{{ summary.absent }}</div>
+    <div class="stat-label">Absent Today</div>
+  </div>
+  <div class="stat-card orange">
+    <div class="stat-value">{{ summary.percentage }}%</div>
+    <div class="stat-label">Attendance Rate</div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+  <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+    <span style="font-weight:600;">Today's Attendance Progress</span>
+    <span style="color:#888;font-size:.9rem;">{{ summary.date }}</span>
+  </div>
+  <div class="progress">
+    <div class="progress-bar" style="width:{{ summary.percentage|int }}%;"></div>
+  </div>
+  <div style="margin-top:6px;font-size:.82rem;color:#888;">
+    {{ summary.present }} of {{ summary.total }} students marked present
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-8">
+    <div class="card">
+      <div class="card-title">Recent Attendance (Today)</div>
+      {% if recent %}
+      <table>
+        <thead>
+          <tr><th>#</th><th>Name</th><th>Roll No.</th><th>Department</th><th>Time</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for r in recent %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><strong>{{ r.name }}</strong></td>
+            <td>{{ r.roll_number }}</td>
+            <td>{{ r.department }}</td>
+            <td>{{ r.time }}</td>
+            <td><span class="badge badge-success">{{ r.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p style="color:#888;text-align:center;padding:30px 0;">No attendance marked yet today.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="card">
+      <div class="card-title">Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <a href="/register" class="btn btn-primary">+ Register New Student</a>
+        <a href="/students" class="btn btn-info">View All Students</a>
+        <a href="/attendance" class="btn btn-info">View Attendance</a>
+        <a href="/export_csv" class="btn btn-warning">Export Today CSV</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Model Status</div>
+      {% if model_ready %}
+        <div class="alert alert-success">Model trained and ready</div>
+        <p style="font-size:.85rem;color:#555;">Click <strong>Start Recognition</strong> to begin marking attendance.</p>
+      {% else %}
+        <div class="alert alert-danger">Model not trained yet</div>
+        <p style="font-size:.85rem;color:#555;">Register students, then click <strong>Train Model</strong>.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

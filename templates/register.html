@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Register Student - CV Attendance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Register New Student</h1>
+  <a href="/students" class="btn btn-info">Back to Students</a>
+</div>
+{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="row">
+  <div class="col-8">
+    <div class="card">
+      <div class="card-title">Student Information</div>
+      <form method="post">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input class="form-control" type="text" name="name" placeholder="e.g. Ali Hassan" required>
+        </div>
+        <div class="form-group">
+          <label>Roll Number *</label>
+          <input class="form-control" type="text" name="roll_number" placeholder="e.g. CS-2021-001" required>
+        </div>
+        <div class="form-group">
+          <label>Department</label>
+          <select class="form-control" name="department">
+            <option>Computer Science</option>
+            <option>Electronics</option>
+            <option>Mechanical</option>
+            <option>Civil</option>
+            <option>Business</option>
+            <option>Mathematics</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;">
+          Register and Capture Face Samples
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="card">
+      <div class="card-title">Instructions</div>
+      <ol style="padding-left:18px;line-height:2;font-size:.88rem;color:#555;">
+        <li>Fill in student details</li>
+        <li>Click Register and Capture</li>
+        <li>A webcam window will open</li>
+        <li>Face the camera clearly</li>
+        <li>30 samples will be captured</li>
+        <li>Window closes automatically</li>
+        <li>Go to Dashboard and click <strong>Train Model</strong></li>
+        <li>Then click <strong>Start Recognition</strong></li>
+      </ol>
+      <div class="alert alert-info" style="margin-top:12px;font-size:.82rem;">
+        Tip: Good lighting and facing the camera directly gives best results.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
